@@ -1,7 +1,7 @@
-package kata.project.controllers;
+package kata.project.controller;
 
-import kata.project.models.User;
-import kata.project.services.UserService;
+import kata.project.model.User;
+import kata.project.service.UserService1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,21 +14,21 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UsersController {
 
-    private final UserService userService;
+    private final UserService1 userService;
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService1 userService) {
         this.userService = userService;
     }
     //вывод всех пользователей по начальному запросу /users
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.listUsers());
         return "users/index";
     }
     //показать пользователя по id
     @GetMapping("/{id}")
     public String show(@PathVariable(value = "id") int id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
+        model.addAttribute("user", userService.getUser(id));
         return "/users/show";
     }
     //страница создания нового пользователя и передача post запроса на /users
@@ -42,14 +42,14 @@ public class UsersController {
         if (bindingResult.hasErrors()) {
             return "users/new";
         }
-        userService.save(user);
+        userService.add(user);
         return "redirect:/users";
     }
 
     //запрос на изменения пользователя по id и patch запрос /{id}
     @GetMapping("/{id}/edit")
     public String edit(Model model,@PathVariable(value = "id")int id) {
-        model.addAttribute("user", userService.findOne(id));
+        model.addAttribute("user", userService.getUser(id));
         return "/users/edit";
     }
     //получение пользователя и обновление

@@ -28,7 +28,6 @@ import java.util.Properties;
 @ComponentScan("kata.project")
 @PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement
-@EnableJpaRepositories("kata.project.repositories")
 @EnableWebMvc
 public class JavaConfig implements WebMvcConfigurer {
 
@@ -90,7 +89,7 @@ public class JavaConfig implements WebMvcConfigurer {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("kata.project.models");
+        em.setPackagesToScan("kata.project.model");
 
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
